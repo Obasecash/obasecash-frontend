@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ObaseCash Dashboard 💳</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="obasecash-theme.css">
+
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #1e3799, #4a69bd);
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #0a3d62;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .balance {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #60a3bc;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #82ccdd;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    th {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <header>🏦 ObaseCash Dashboard</header>
+
+  <div class="container">
+    <h2 id="userName">Welcome, User</h2>
+    <p><strong>Account Number:</strong> <span id="accNumber"></span></p>
+    <p class="balance">Balance: $<span id="balance">0</span></p>
+
+    <h3>Quick Transfer</h3>
+    <input type="text" id="toAcc" placeholder="Recipient Account" />
+    <input type="number" id="amount" placeholder="Amount" />
+    <button onclick="transfer()">Send Money</button>
+
+    <h3>Transaction History</h3>
+    <table>
+      <thead>
+        <tr><th>From</th><th>To</th><th>Amount</th><th>Date</th></tr>
+      </thead>
+      <tbody id="history"></tbody>
+    </table>
+
+    <div style="margin-top:20px;">
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const api = "http://localhost:5000/api";
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      alert("Please log in first.");
+      window.location = "index.html";
+    }
+
+    document.getElementById("userName").innerText = "Welcome, " + user.fullname;
+    document.getElementById("accNumber").innerText = user.account_number || "N/A";
+
+    async function loadBalance() {
+      const res = await fetch(api + "/balance/" + user.account_number);
+      const data = await res.json();
+      if (data.balance !== undefined) {
+        document.getElementById("balance").innerText = data.balance.toFixed(2);
+      }
+    }
+
+    async function loadTransactions() {
+      const res = await fetch(api + "/transactions/" + user.account_number);
+      const data = await res.json();
+      const history = document.getElementById("history");
+      history.innerHTML = "";
+      if (data.length === 0) {
+        history.innerHTML = "<tr><td colspan='4'>No transactions yet.</td></tr>";
+        return;
+      }
+      data.forEach(tx => {
+        history.innerHTML += `<tr><td>${tx.from_account}</td><td>${tx.to_account}</td><td>$${tx.amount}</td><td>${tx.date}</td></tr>`;
+      });
+    }
+
+    async function transfer() {
+      const to_account = document.getElementById("toAcc").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (!to_account || !amount) return alert("Please fill in all fields.");
+
+      const res = await fetch(api + "/transfer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from_account: user.account_number,
+          to_account,
+          amount,
+        }),
+      });
+
+      const data = await res.json();
+      alert(data.message);
+      loadBalance();
+      loadTransactions();
+    }
+
+    function logout() {
+      localStorage.removeItem("user");
+      window.location = "index.html";
+    }
+
+    loadBalance();
+    loadTransactions();
+  </script>
+</body>
+</html>

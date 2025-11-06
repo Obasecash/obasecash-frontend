@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ObaseCash Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #0a3d62, #3c6382);
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    body.dark {
+      background: #1e272e;
+      color: #dcdde1;
+    }
+
+    header {
+      background-color: #1e3799;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    #themeToggle, #logoutBtn {
+      background: #60a3bc;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #themeToggle:hover, #logoutBtn:hover {
+      background: #82ccdd;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    h2 {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      padding-bottom: 5px;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: #60a3bc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #82ccdd;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #0a3d62, #3c6382);
+      border-radius: 12px;
+      color: #fff;
+      padding: 20px;
+      text-align: left;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .card .chip {
+      width: 40px;
+      height: 30px;
+      background: gold;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #dcdde1;
+      padding-bottom: 15px;
+    }
+
+    #currencyTicker {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    .notify-tray {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <body onload="fadeInDashboard()" style="opacity:0; transition: opacity 1.2s ease;">
+
+  <header>
+    <h1>ObaseCash Dashboard</h1>
+    <div>
+      <button id="themeToggle">🌙 Dark Mode</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <p id="welcomeBanner">Welcome back, <span id="userName">User</span> — your account is secure and up to date.</p>
+
+  <main>
+    <section class="account-summary">
+      <h2>Account Summary</h2>
+      <p><strong>Account Number:</strong> <span id="accNumber">••••••••</span></p>
+      <p><strong>Balance:</strong> <span id="accBalance">$0.00</span></p>
+      <p><strong>Currency:</strong> <span id="accCurrency">USD</span></p>
+    </section>
+
+    <section class="transfer-section">
+      <h2>Quick Transfer</h2>
+      <form id="quickTransferForm">
+        <input type="text" id="toAccount" placeholder="Recipient Account" required />
+        <input type="number" id="transferAmount" placeholder="Amount" required />
+        <button type="submit">Send</button>
+        <button id="depositBtn">Deposit Funds 💳</button>
+
+      </form>
+      <div id="transferMessage"></div>
+    </section>
+
+    <section class="transactions">
+      <h2>Recent Transactions</h2>
+      <ul id="transactionsList">
+        <li>Loading transactions...</li>
+      </ul>
+    </section>
+
+    <section class="cards">
+      <h2>My Virtual Mastercard</h2>
+      <div class="card">
+        <div class="chip"></div>
+        <p class="card-number">**** **** **** 5821</p>
+        <p class="card-name">ObaseCash Virtual</p>
+        <p class="card-expiry">VALID THRU 12/29</p>
+      </div>
+    </section>
+  </main>
+
+  <div style="text-align:center; margin-top:15px;">
+    <label><strong>Currency:</strong></label>
+    <select id="currencySelect">
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="GBP">GBP</option>
+      <option value="XAF">XAF</option>
+    </select>
+  </div>
+
+  <div id="currencyTicker">💱 Loading exchange rates...</div>
+
+  <footer>© 2025 ObaseCash International Bank</footer>
+  <div id="notifyTray" class="notify-tray"></div>
+
+  <script src="dashboard.js"></script>
+<script>
+  function fadeInDashboard() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromWelcome = urlParams.get("from");
+
+    // Delay fade-in if coming from the welcome page
+    if (fromWelcome === "welcome") {
+      setTimeout(() => {
+        document.body.style.opacity = 1;
+      }, 800); // wait for welcome fade-out
+    } else {
+      document.body.style.opacity = 1;
+    }
+  }
+</script>
+</body>
+</html>

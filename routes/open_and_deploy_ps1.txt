@@ -1,0 +1,25 @@
+# Open and Deploy FantasySlot Project
+# By Yumsie MarieClaire Iyome
+
+Write-Host "=== Launching FantasySlot Project ===" -ForegroundColor Green
+
+# Step 1: Navigate to project directory
+Set-Location "C:\Users\Yumsie\Desktop\YUMSIE_IYOME_CINEMATIC_UNIVERSE_PACK_FINAL_MASTER_BY_YUMSIE_IYOME\FantasySlot"
+
+# Step 2: Confirm current path
+Write-Host "Current Directory:" (Get-Location) -ForegroundColor Cyan
+
+# Step 3: Open project in VS Code
+Write-Host "Opening Visual Studio Code..." -ForegroundColor Yellow
+Start-Process code .
+
+# Step 4: Firebase Login (optional)
+Write-Host "Checking Firebase Login..."
+firebase login
+
+# Step 5: Deploy to Firebase
+Write-Host "Deploying to Firebase Hosting..." -ForegroundColor Yellow
+firebase deploy
+
+Write-Host "=== Deployment Complete! 🚀 ===" -ForegroundColor Green
+Pause

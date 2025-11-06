@@ -1,0 +1,33 @@
+{
+  "name": "obasecash-bank",
+  "version": "2.0.0",
+  "description": "ObaseCash International Online Bank - secure digital banking with virtual Mastercard and multi-currency dashboard.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "bank",
+    "api",
+    "sqlite3",
+    "express",
+    "digital-banking",
+    "virtual-card",
+    "multicurrency",
+    "obasecash"
+  ],
+  "author": "ObaseCash Developer",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

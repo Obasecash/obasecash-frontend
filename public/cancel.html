@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Cancelled - ObaseCash</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(120deg, #ff3b3b, #8b0000);
+      color: white;
+      text-align: center;
+      padding-top: 120px;
+    }
+    h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      background: white;
+      color: #ff3b3b;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    a:hover {
+      background: #e2e2e2;
+    }
+  </style>
+</head>
+<body>
+  <h1>❌ Payment Cancelled</h1>
+  <p>Your transaction was cancelled. No funds were charged.</p>
+  <p>You can retry your deposit anytime.</p>
+
+  <a href="dashboard.html">Return to Dashboard</a>
+
+  <!-- Optional: auto return after a few seconds -->
+  <script>
+    setTimeout(() => window.location.href = "dashboard.html", 4000);
+  </script>
+</body>
+</html>

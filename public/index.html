@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ObaseCash International Bank 💳</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #0a3d62, #3c6382);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    header {
+      background-color: #1e3799;
+      padding: 15px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #60a3bc;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #82ccdd;
+    }
+
+    #result {
+      margin-top: 20px;
+      color: #f6b93b;
+    }
+  </style>
+</head>
+<body>
+  <header>🌍 ObaseCash International Online Bank</header>
+  <div class="container">
+    <h2>Register Account</h2>
+    <input type="text" id="fullname" placeholder="Full Name" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="register()">Register</button>
+
+    <hr />
+
+    <h2>Login</h2>
+    <input type="email" id="loginEmail" placeholder="Email" />
+    <input type="password" id="loginPassword" placeholder="Password" />
+    <button onclick="login()">Login</button>
+
+    <hr />
+
+    <h2>Check Balance</h2>
+    <input type="text" id="accNumber" placeholder="Account Number" />
+    <button onclick="checkBalance()">Check</button>
+
+    <hr />
+
+    <h2>Transfer</h2>
+    <input type="text" id="fromAcc" placeholder="From Account" />
+    <input type="text" id="toAcc" placeholder="To Account" />
+    <input type="number" id="amount" placeholder="Amount" />
+    <button onclick="transfer()">Transfer</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const api = "http://localhost:5000/api";
+
+  
+    async function register() {
+      const fullname = fullname.value;
+      const email = email.value;
+      const password = password.value;
+      const res = await fetch(api + "/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fullname, email, password }),
+      });
+      const data = await res.json();
+      result.innerText = data.message + (data.accountNumber ? " | " + data.accountNumber : "");
+    }
+
+    
+    async function login() {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+
+  try {
+    const res = await fetch(api + "/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (data.message && data.message.includes("Login successful")) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "welcome.html"; // redirect to welcome screen first
+    } else {
+      alert(data.message || "Login failed");
+    }
+  } catch (err) {
+    alert("Server error: " + err.message);
+  }
+}
+
+
+    async function checkBalance() {
+      const acc = accNumber.value;
+      const res = await fetch(api + "/balance/" + acc);
+      const data = await res.json();
+      result.innerText = data.account_number
+        ? `Balance: $${data.balance}`
+        : data.message;
+    }
+
+    async function transfer() {
+      const from_account = fromAcc.value;
+      const to_account = toAcc.value;
+      const amount = parseFloat(amount.value);
+      const res = await fetch(api + "/transfer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ from_account, to_account, amount }),
+      });
+      const data = await res.json();
+      result.innerText = data.message;
+    }
+  </script>
+  <script>
+  async function register() {
+    const fullname = document.getElementById("fullname").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const res = await fetch(api + "/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullname, email, password }),
+    });
+
+    const data = await res.json();
+    alert(data.message + (data.accountNumber ? " | Account: " + data.accountNumber : ""));
+  }
+
+  async function checkBalance() {
+    const acc = document.getElementById("accNumber").value;
+    const res = await fetch(api + "/balance/" + acc);
+    const data = await res.json();
+    alert(data.account_number ? `Balance: $${data.balance}` : data.message);
+  }
+
+  async function transfer() {
+    const from_account = document.getElementById("fromAcc").value;
+    const to_account = document.getElementById("toAcc").value;
+    const amount = parseFloat(document.getElementById("amount").value);
+
+    const res = await fetch(api + "/transfer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ from_account, to_account, amount }),
+    });
+
+    const data = await res.json();
+    alert(data.message);
+  }
+</script>
+
+
+</body>
+</html>

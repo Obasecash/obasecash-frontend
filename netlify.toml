@@ -1,0 +1,23 @@
+# 🏦 ObaseCash Frontend Configuration for Netlify
+
+[build]
+  publish = "public"
+  command = ""
+
+# ✅ Redirect all requests to index.html (Single Page App behavior)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 🌍 Environment Variables for API endpoint
+[build.environment]
+  NODE_ENV = "production"
+  API_URL = "https://obasecash-api.onrender.com/api"
+
+
+# Optional: Disable aggressive caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "no-cache"
