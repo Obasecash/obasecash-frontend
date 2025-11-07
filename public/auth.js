@@ -1,5 +1,7 @@
-// ✅ Correct API base UR
-const api = "https://obasecash-api.onrender.com/api";
+
+document.addEventListener("DOMContentLoaded", () => {
+// ✅ Correct API base URL
+const api = "https://obasecash-api.onrender.com/api/users";
 
 
 // ====== REGISTER ======
