@@ -1,5 +1,6 @@
-// ✅ Correct API base URL
-const api = "http://localhost:5000/api";
+// ✅ Correct API base UR
+const api = "https://obasecash-api.onrender.com/api";
+
 
 // ====== REGISTER ======
 const regForm = document.getElementById("registerForm");
