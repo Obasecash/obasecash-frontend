@@ -1,4 +1,6 @@
-const api = "http://localhost:5000/api";
+
+const api = "https://obasecash-api.onrender.com/api";
+
 const user = JSON.parse(localStorage.getItem("user"));
 
 // Redirect if user not logged in

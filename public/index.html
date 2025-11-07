@@ -67,6 +67,7 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="Password" />
     <button onclick="register()">Register</button>
+    <button type="submit">Register</button>
 
     <hr />
 
@@ -93,7 +94,7 @@
   </div>
 
   <script>
-    const api = "http://localhost:5000/api";
+    const api = "https://obasecash-api.onrender.com/api";
 
   
     async function register() {
@@ -195,7 +196,6 @@
     alert(data.message);
   }
 </script>
-
-
+      <script src="auth-v2.js"></script>
 </body>
 </html>

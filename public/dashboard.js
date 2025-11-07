@@ -1,4 +1,5 @@
-const apiBase = "http://localhost:5000/api";
+
+const api = "https://obasecash-api.onrender.com/api";
 const accountNumber = "ACC-1001"; // Example static account (replace with dynamic login data)
 
 async function loadDashboard() {

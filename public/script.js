@@ -1,4 +1,5 @@
-const apiBase = "http://localhost:5000/api";
+
+const api = "https://obasecash-api.onrender.com/api";
 
 // Create Account
 document.getElementById("createAccountForm").addEventListener("submit", async e => {
