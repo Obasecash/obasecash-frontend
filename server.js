@@ -2,87 +2,39 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config();
-
-
 const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
 
-// ✅ Allow Netlify frontend to access backend (CORS fix)
+// -------- CORS Configuration (Netlify + Render Fix) --------
 app.use(cors({
-  origin: [
-    "https://charming-gingersnap-181bf5.netlify.app" // your live frontend
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: ["https://charming-gingersnap-181bf5.netlify.app"], // your live frontend
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-
-
-// ✅ Allow Netlify frontend access
-app.use(cors({
-  origin: [
-    "https://charming-gingersnap-181bf5.netlify.app", // your frontend URL
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"],
+// ✅ Handle preflight CORS requests
+app.options("*", cors({
+  origin: ["https://charming-gingersnap-181bf5.netlify.app"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-
-// ✅ Handle preflight CORS requests (important for POST requests)
-app.options("*", cors());
-
-// ✅ Parse JSON & form data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-// -------- Health route --------
-app.get("/", (_req, res) => {
-  res.status(200).send("ObaseCash API is running ✅");
-});
-
-
-// 🩵 Optional: Log requests (for debugging)
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
-  next();
-});
-
-
 
 // -------- Middleware --------
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*", // Allow all for now; can restrict to Netlify later
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(express.urlencoded({ extended: true }));
 
-
-// -------- MongoDB Connection --------
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("✅ MongoDB connected successfully"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
-
-// -------- Simple Logs & Proxy Setup (Render) --------
+// -------- Simple Logs (for debugging on Render) --------
 app.set("trust proxy", 1);
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// -------- Root & Health Routes --------
+// -------- Health & Root Routes --------
 app.get("/", (_req, res) => {
-  res.status(200).send("🌍 ObaseCash API is running successfully ✅");
+  res.status(200).send("✅ ObaseCash API is running successfully on Render!");
 });
 
 app.get("/health", (_req, res) => {
@@ -91,6 +43,14 @@ app.get("/health", (_req, res) => {
     time: new Date().toISOString(),
   });
 });
+
+// -------- MongoDB Connection --------
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB connected successfully"))
+.catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // -------- Import & Mount Routes --------
 try {
