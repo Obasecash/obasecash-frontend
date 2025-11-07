@@ -3,6 +3,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+// ✅ Allow Netlify frontend to access backend (CORS fix)
+app.use(cors({
+  origin: [
+    "https://charming-gingersnap-181bf5.netlify.app" // your live frontend
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
+
 // ✅ Allow Netlify frontend access
 app.use(cors({
   origin: [
@@ -27,6 +38,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 // -------- MongoDB Connection --------
 mongoose
