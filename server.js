@@ -2,6 +2,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
+// ✅ Allow Netlify frontend access
+app.use(cors({
+  origin: [
+    "https://charming-gingersnap-181bf5.netlify.app", // your frontend URL
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
 const dotenv = require("dotenv");
 
 dotenv.config();
