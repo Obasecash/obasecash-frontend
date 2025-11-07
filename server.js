@@ -1,91 +1,65 @@
-// server.js
-// ObaseCash API – production-ready minimal server
-
-require("dotenv").config();
+// -------- Dependencies --------
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
+const dotenv = require("dotenv");
 
+dotenv.config();
 const app = express();
 
-// -------- CORS (Netlify + local dev) --------
-const allowedOrigins = [
-  "https://charming-gingersnap-181fb5.netlify.app", // your Netlify site
-  "http://localhost:5500",                           // VSCode Live Server (optional)
-  "http://127.0.0.1:5500",                           // VSCode Live Server (optional)
-  "http://localhost:3000",                           // local SPA (optional)
-  "http://localhost:5000"                            // local API tests
-];
-
+// -------- Middleware --------
+app.use(express.json());
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // allow mobile apps / curl (no origin) and our whitelist
-      if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("CORS blocked: " + origin));
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: false
+    origin: "*", // Allow all for now; can restrict to Netlify later
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Handle OPTIONS preflight quickly
-app.options("*", cors());
+// -------- MongoDB Connection --------
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// -------- Body parsers --------
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true }));
-
-// -------- Trust proxy (Render) --------
+// -------- Simple Logs & Proxy Setup (Render) --------
 app.set("trust proxy", 1);
-
-// -------- Simple request log (helps debugging on Render) --------
-app.use((req, _res, next) => {
+app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// -------- Health & root routes (keep Render awake) --------
+// -------- Root & Health Routes --------
 app.get("/", (_req, res) => {
-  res.status(200).send("ObaseCash API is running ✅");
+  res.status(200).send("🌍 ObaseCash API is running successfully ✅");
 });
 
 app.get("/health", (_req, res) => {
-  res.status(200).json({ ok: true, time: new Date().toISOString() });
+  res.status(200).json({
+    ok: true,
+    time: new Date().toISOString(),
+  });
 });
 
-// -------- Mount your existing routers --------
-// Make sure these files exist in /routes
+// -------- Import & Mount Routes --------
 try {
-  const usersRouter = require("./routes/users");           // /api/users
-  const accountsRouter = require("./routes/accounts");     // /api/accounts
-  const transactionsRouter = require("./routes/transactions"); // /api/transactions (if you have it)
+  const usersRouter = require("./routes/users");
+  const accountsRouter = require("./routes/accounts");
+  const transactionsRouter = require("./routes/transactions");
 
   app.use("/api/users", usersRouter);
   app.use("/api/accounts", accountsRouter);
-  if (transactionsRouter) app.use("/api/transactions", transactionsRouter);
+  app.use("/api/transactions", transactionsRouter);
 } catch (err) {
-  console.warn("Router load warning:", err.message);
-  console.warn("Ensure ./routes/users.js, ./routes/accounts.js, ./routes/transactions.js exist.");
+  console.error("⚠️ Route import error:", err.message);
 }
 
-// -------- Static (for local testing only) --------
-const publicDir = path.join(__dirname, "public");
-app.use(express.static(publicDir));
-
-// -------- 404 fallback for API --------
-app.use("/api", (_req, res) => {
-  res.status(404).json({ message: "Not Found" });
-});
-
-// -------- Global error handler --------
-app.use((err, _req, res, _next) => {
-  console.error("API error:", err);
-  res.status(500).json({ message: "Server error", detail: err.message || err });
-});
-
-// -------- Start server --------
+// -------- Start Server --------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`ObaseCash server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
