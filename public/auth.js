@@ -1,77 +1,65 @@
-// auth.js
-// Handles registration and login using global config.js
+// ===== ObaseCash Auth.js =====
+const API_BASE = "https://obasecash-api.onrender.com/api";
 
-console.log("✅ auth.js loaded with API:", API_BASE_URL);
+// REGISTER
+async function register() {
+  const fullname = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-// ===== REGISTER =====
-const regForm = document.getElementById("registerForm");
-if (regForm) {
-  regForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (!fullname || !email || !password) {
+    alert("Please fill in all fields!");
+    return;
+  }
 
-    const fullname = document.getElementById("fullname").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+  try {
+    const res = await fetch(`${API_BASE}/users/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullname, email, password }),
+    });
 
-    if (!fullname || !email || !password) {
-      alert("⚠️ Please fill in all fields.");
-      return;
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Registration successful!");
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "dashboard.html";
+    } else {
+      alert("❌ " + (data.message || "Registration failed."));
     }
-
-    try {
-      const res = await fetch(apiEndpoint("/users/register"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fullname, email, password }),
-      });
-
-      const data = await res.json();
-      document.getElementById("registerMessage").innerText =
-        data.message || "Registration complete.";
-
-      if (res.ok && data.message.toLowerCase().includes("success")) {
-        alert("✅ Registration successful! Redirecting to login...");
-        setTimeout(() => (window.location.href = "login.html"), 1500);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("❌ Server Error: " + err.message);
-    }
-  });
+  } catch (err) {
+    console.error("Register Error:", err);
+    alert("⚠️ Network error during registration.");
+  }
 }
 
-// ===== LOGIN =====
-const logForm = document.getElementById("loginForm");
-if (logForm) {
-  logForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// LOGIN
+async function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
 
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value.trim();
+  if (!email || !password) {
+    alert("Please fill in all fields!");
+    return;
+  }
 
-    if (!email || !password) {
-      alert("⚠️ Please enter both email and password.");
-      return;
+  try {
+    const res = await fetch(`${API_BASE}/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ Login successful!");
+      localStorage.setItem("user", JSON.stringify(data.user));
+      window.location.href = "dashboard.html";
+    } else {
+      alert("❌ " + (data.message || "Login failed."));
     }
-
-    try {
-      const res = await fetch(apiEndpoint("/users/login"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.user) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        alert("✅ Login successful!");
-        window.location.href = "dashboard.html";
-      } else {
-        alert(data.message || "❌ Login failed.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("❌ Server Error: " + err.message);
-    }
-  });
+  } catch (err) {
+    console.error("Login Error:", err);
+    alert("⚠️ Network error during login.");
+  }
 }
