@@ -1,442 +1,158 @@
-/* ===== ObaseCash Dashboard Styling ===== */
+/* ===== OBASECASH DASHBOARD THEME ===== */
+
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(120deg, #0a3d62, #3c6382);
-  color: white;
   margin: 0;
-  padding: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f4c81, #1b1f3b);
+  color: #fff;
+  transition: background 0.5s ease, color 0.5s ease;
+  opacity: 0;
+  transition: opacity 1.2s ease;
 }
 
 /* ===== HEADER ===== */
 header {
-  background: #1e3799;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 25px;
+  padding: 20px 40px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-h1 {
+header h1 {
   margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #00ffff;
 }
 
 button {
-  background: #60a3bc;
+  background: #00b4d8;
   border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
   color: white;
+  padding: 10px 18px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
   font-weight: bold;
-  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #82ccdd;
+  background: #0096c7;
+  transform: scale(1.05);
 }
 
-/* ===== SECTIONS ===== */
+/* ===== MAIN ===== */
+main {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
 section {
-  background: rgba(255, 255, 255, 0.1);
-  margin: 20px auto;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 20px;
-  border-radius: 10px;
-  max-width: 700px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
 }
 
-h2 {
-  text-align: center;
-  color: #ffeaa7;
+section:hover {
+  transform: translateY(-3px);
 }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  font-size: 15px;
-}
-
-/* ===== BALANCE ===== */
-.account-summary {
-  text-align: center;
+/* ===== ACCOUNT SUMMARY ===== */
+.account-summary h2,
+.transfer-section h2,
+.transactions h2,
+.cards h2 {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 8px;
 }
 
 .account-summary p {
-  margin: 10px 0;
-  font-size: 18px;
-}
-
-/* ===== TRANSFERS ===== */
-.transfer-section form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.transfer-section button {
-  margin-top: 10px;
-  width: 100%;
+  font-size: 16px;
+  margin: 8px 0;
 }
 
 /* ===== TRANSACTIONS ===== */
-ul {
+#transactionList {
   list-style: none;
   padding: 0;
 }
 
-li {
-  margin: 8px 0;
-  padding: 12px;
+#transactionList li {
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 6px;
+  padding: 8px;
   border-radius: 6px;
-  font-weight: 500;
-}
-
-li.sent {
-  background: rgba(255, 50, 50, 0.2);
-  border-left: 5px solid #e55039;
-}
-
-li.received {
-  background: rgba(46, 204, 113, 0.2);
-  border-left: 5px solid #2ecc71;
-}
-
-.tx-row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.tx-type {
-  font-weight: bold;
-}
-
-.tx-amount {
-  font-size: 18px;
-}
-
-.tx-date {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
-/* ===== VIRTUAL CARD ===== */
-.cards {
-  text-align: center;
-}
-
-.card-virtual {
-  position: relative;
-  width: 350px;
-  height: 210px;
-  background: linear-gradient(135deg, #1e3799, #0a3d62);
-  border-radius: 20px;
-  padding: 25px;
-  color: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  margin: 20px auto;
-  overflow: hidden;
-  font-family: "Poppins", sans-serif;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-
-.card-virtual:hover {
-  transform: scale(1.03);
-  box-shadow: 0 10px 25px rgba(255,255,255,0.2);
-}
-
-.card-chip {
-  width: 50px;
-  height: 35px;
-  background: linear-gradient(45deg, #ffd32a, #fbc531);
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.card-logo {
-  position: absolute;
-  top: 15px;
-  right: 25px;
-  font-weight: bold;
-  letter-spacing: 1px;
   font-size: 14px;
 }
 
-.card-number {
-  font-size: 20px;
-  letter-spacing: 3px;
-  margin-top: 20px;
+/* ===== CARD SECTION ===== */
+.card {
+  background: linear-gradient(145deg, #1f4068, #162447);
+  border-radius: 12px;
+  padding: 25px;
+  color: #f1f1f1;
+  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.2);
+  text-align: center;
 }
 
-.card-name {
-  margin-top: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.card-balance {
+.card .chip {
   font-size: 24px;
-  font-weight: bold;
-  margin-top: 25px;
-  color: #fffa65;
 }
 
-.card-expiry {
-  position: absolute;
-  bottom: 20px;
-  right: 25px;
-  font-size: 13px;
-  color: #dcdcdc;
-}
-
-/* Card Shine Animation */
-.card-virtual::before {
-  content: "";
-  position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 250%;
-  height: 250%;
-  background: linear-gradient(
-    60deg,
-    rgba(255,255,255,0.2) 0%,
-    rgba(255,255,255,0.1) 50%,
-    transparent 100%
-  );
-  transform: rotate(25deg);
-  animation: shine 5s infinite linear;
-}
-
-@keyframes shine {
-  0% { transform: translateX(-100%) rotate(25deg); }
-  100% { transform: translateX(100%) rotate(25deg); }
+.card p {
+  margin: 6px 0;
+  font-size: 14px;
 }
 
 /* ===== FOOTER ===== */
 footer {
   text-align: center;
-  margin: 20px 0;
-  color: #dcdcdc;
+  margin-top: 30px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
   font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
-@media (max-width: 600px) {
-  .card-virtual {
-    width: 90%;
-    height: 200px;
-    padding: 20px;
+/* ===== LIGHT MODE ===== */
+.light-mode {
+  background: #f5f5f5;
+  color: #222;
+}
+
+.light-mode header,
+.light-mode section,
+.light-mode footer {
+  background: #ffffffcc;
+  color: #222;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.light-mode button {
+  background: #00509e;
+}
+
+.light-mode button:hover {
+  background: #003f7d;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
   }
-  section {
-    width: 90%;
+
+  main {
+    padding: 15px;
+    grid-template-columns: 1fr;
   }
-  h1 {
-    font-size: 20px;
-  }
-  h2 {
-    font-size: 18px;
-  }
-}
-
-#currencySelect {
-  padding: 8px;
-  border-radius: 5px;
-  background: #60a3bc;
-  color: white;
-  font-weight: bold;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin-top: 8px;
-}
-
-#currencySelect:hover {
-  background: #82ccdd;
-}
-
-.card-balance {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 24px;
-  font-weight: bold;
-  color: #fffa65;
-}
-
-/* === SMOOTH THEME TRANSITION === */
-body, header, section, footer, .card-virtual {
-  transition: background 0.8s ease, color 0.8s ease, box-shadow 0.8s ease;
-}
-
-/* === GLOW EFFECTS === */
-.card-virtual {
-  transition: box-shadow 0.6s ease, transform 0.3s ease;
-}
-
-.card-virtual:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); /* gold glow */
-}
-
-button {
-  transition: box-shadow 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 12px rgba(0, 255, 255, 0.4); /* cyan glow */
-}
-
-/* === RESPONSIVE GRID LAYOUT === */
-main {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-section {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  padding: 20px;
-  transition: all 0.4s ease;
-}
-
-/* === DARK MODE CARD GLOW === */
-body.dark-mode .card-virtual {
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-}
-
-body.dark-mode section:hover {
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.1);
-}
-
-main {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* === WELCOME BANNER === */
-.welcome-banner {
-  background: linear-gradient(90deg, #007bff, #00c6ff);
-  color: white;
-  padding: 15px 20px;
-  text-align: center;
-  border-radius: 10px;
-  font-size: 1.1em;
-  margin: 20px auto;
-  width: 95%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-}
-
-body.dark-mode .welcome-banner {
-  background: linear-gradient(90deg, #004aad, #0099cc);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-/* ===== NOTIFICATION TOASTS ===== */
-.notify-tray {
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  width: min(600px, 92vw);
-  z-index: 9999;
-  pointer-events: none; /* clicks pass through except on toasts */
-}
-
-.note {
-  pointer-events: auto;
-  background: rgba(25, 25, 25, 0.92);
-  color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  margin-top: 10px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: toastIn 220ms ease-out;
-  border-left: 6px solid #3498db; /* default info */
-  font-size: 14px;
-}
-
-.note.success { border-left-color: #2ecc71; }
-.note.warn    { border-left-color: #f1c40f; }
-.note.error   { border-left-color: #e74c3c; }
-
-.note .close {
-  margin-left: auto;
-  cursor: pointer;
-  opacity: .8;
-}
-
-@keyframes toastIn {
-  from { transform: translate(-50%, 10px); opacity: 0; }
-  to   { transform: translate(-50%, 0);    opacity: 1; }
-}
-
-@keyframes toastOut {
-  to { transform: translate(-50%, -6px); opacity: 0; }
-}
-
-/* dark mode tweak */
-body.dark-mode .note { background: rgba(255,255,255,0.06); color:#fff; }
-
-/* ===== NOTIFICATION TOASTS WITH ICONS ===== */
-.notify-tray {
-  position: fixed;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  width: min(600px, 92vw);
-  z-index: 9999;
-  pointer-events: none;
-}
-
-.note {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 12px;
-  margin-top: 10px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.35);
-  color: #fff;
-  animation: toastIn 220ms ease-out;
-  font-size: 14px;
-}
-
-.note .icon { font-size: 18px; line-height: 1; }
-.note .text { flex: 1; }
-.note .close { cursor: pointer; opacity:.85; padding-left: 6px; }
-
-.note.info    { background: #2d7cf6; }
-.note.success { background: #19ad66; }
-.note.warn    { background: #f1a208; }
-.note.error   { background: #e14848; }
-
-@keyframes toastIn { from{transform: translateY(8px); opacity:0} to{transform: translateY(0); opacity:1} }
-@keyframes toastOut { to{transform: translateY(-6px); opacity:0} }
-
-/* Dark mode tweak */
-body.dark-mode .note { box-shadow: 0 8px 18px rgba(255,255,255,.12); }
-
-/* Glowing balance animation */
-@keyframes glow {
-  0% { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
-  50% { text-shadow: 0 0 25px #00ffaa, 0 0 50px #00ffaa; }
-  100% { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc; }
-}
-
-.animate-glow {
-  animation: glow 1.5s ease-in-out 2;
 }
